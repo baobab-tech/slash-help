@@ -2,41 +2,49 @@
 
 When a user gives you a `/help` URL, use it to discover and retrieve information.
 
-## Quick Usage
-
-```bash
-# User says: "Check https://api.example.com/help for how to authenticate"
-
-# 1. Fetch the root help
-curl https://api.example.com/help
-
-# 2. Look for auth-related topics in the response
-
-# 3. Fetch the specific topic
-curl https://api.example.com/auth/help
-
-# 4. Use the information to help the user
-```
-
 ## Pattern
 
-- `GET /help` - Start here, shows available topics
+- `GET /help` - Start here, lists available topics
 - `GET /topic/help` - Get details on a specific topic
 - Follow links progressively, don't guess paths
 
-## Example
+## Two Modes
+
+### Knowledge Mode (Discovering Information)
 
 ```
-User: "Use https://payments.example.com/help to process a refund"
+https://docs.product.com/help - "How does webhook retry work?"
+https://handbook.company.com/help - "What's our PTO policy?"
+https://standards.eng.io/help - "How should we handle errors in Go?"
+https://runbooks.ops.io/help - "How do I restart the workers?"
+https://design.system.io/help - "What's the button component API?"
+```
 
-You:
-1. curl https://payments.example.com/help
-   → See: /refunds/help, /auth/help, /transactions/help
+### Capabilities Mode (Invoking Services)
 
-2. curl https://payments.example.com/refunds/help
-   → Get refund instructions and endpoint details
+```
+https://qr.tools.io/help - "Make a QR code with a logo"
+https://cron.utils.dev/help - "What does '0 */4 * * *' mean?"
+https://resize.img.io/help - "Shrink this to 800px wide"
+https://json.validate.io/help - "Check if this config is valid"
+https://screenshot.web.io/help - "Capture this URL at mobile size"
+```
 
-3. Execute the refund using the documented endpoint
+## Example Flow
+
+```
+User: "Check https://standards.eng.io/help - how should we handle errors in Go?"
+
+1. GET /help
+   → See: /go/help, /typescript/help, /api-design/help
+
+2. GET /go/help
+   → See: /errors/help, /logging/help, /testing/help
+
+3. GET /go/errors/help
+   → Get: wrapping conventions, sentinel errors, when to panic
+
+4. Return the relevant information to the user
 ```
 
 That's it. URLs + markdown.

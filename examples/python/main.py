@@ -12,120 +12,117 @@ app = FastAPI()
 
 # Content storage - in production, load from files or database
 HELP_CONTENT = {
-    "root": """# Example API
+    "root": """# Recipe Book API
 
 A demo /help protocol implementation.
 
 ## Topics
-- `/auth/help` - Authentication and authorization
-- `/users/help` - User management
-- `/products/help` - Product catalog
+- `/recipes/help` - Browse and search recipes
+- `/ingredients/help` - Ingredient information
+- `/techniques/help` - Cooking techniques
 
 ## Quick Reference
 - `GET /status` - Health check
 - `POST /search` - Search documentation
 
 ## Getting Started
-Start with `/auth/help` to learn how to authenticate.
+Start with `/recipes/help` to browse available recipes.
 """,
 
-    "auth": """# Authentication
+    "recipes": """# Recipes
 
-## Overview
-This API uses Bearer token authentication.
-
-## Get a Token
+## Browse All Recipes
 ```bash
-curl -X POST /auth/token \\
-  -H "Content-Type: application/json" \\
-  -d '{"username": "user", "password": "pass"}'
+GET /recipes
 ```
 
-Response:
-```json
-{"access_token": "eyJ...", "token_type": "bearer"}
-```
-
-## Use the Token
-Add to all requests:
-```
-Authorization: Bearer eyJ...
-```
-
-## Refresh Token
+## Filter by Category
 ```bash
-curl -X POST /auth/refresh \\
-  -H "Authorization: Bearer <current_token>"
+GET /recipes?category=dinner
 ```
+
+Available categories: breakfast, lunch, dinner, dessert, snack
+
+## Get Recipe Details
+```bash
+GET /recipes/{id}
+```
+
+Returns full recipe with:
+- Ingredients list
+- Step-by-step instructions
+- Cooking time and servings
+
+## Search Recipes
+```bash
+GET /recipes/search?q=pasta
+```
+
+Search by recipe name or ingredient.
 
 ## Related
-- `/users/help` - Managing users
+- `/ingredients/help` - Look up ingredient details
+- `/techniques/help` - Learn cooking methods
 """,
 
-    "users": """# User Management
+    "ingredients": """# Ingredients
 
-## List Users
+## Look Up Ingredient
 ```bash
-GET /users?page=1&limit=20
+GET /ingredients/{name}
 ```
 
-## Create User
-```bash
-POST /users
-Content-Type: application/json
+Returns:
+- Nutritional information
+- Common uses
+- Storage tips
 
-{"name": "John", "email": "john@example.com"}
+## Browse by Category
+```bash
+GET /ingredients?category=vegetables
 ```
 
-## Get User
+Categories: vegetables, fruits, proteins, grains, dairy, spices
+
+## Find Substitutes
 ```bash
-GET /users/{id}
+GET /ingredients/{name}/substitutes
 ```
 
-## Update User
-```bash
-PATCH /users/{id}
-Content-Type: application/json
-
-{"name": "Updated Name"}
-```
-
-## Delete User
-```bash
-DELETE /users/{id}
-```
+Get alternatives for dietary restrictions or availability.
 
 ## Related
-- `/auth/help` - Authentication required for all endpoints
+- `/recipes/help` - Find recipes using ingredients
 """,
 
-    "products": """# Product Catalog
+    "techniques": """# Cooking Techniques
 
-## List Products
+## List Techniques
 ```bash
-GET /products?category=electronics&page=1
+GET /techniques
 ```
 
-## Get Product
+## Get Technique Details
 ```bash
-GET /products/{id}
+GET /techniques/{name}
 ```
 
-## Search Products
+Returns:
+- Description
+- When to use it
+- Tips and common mistakes
+
+## Browse by Type
 ```bash
-GET /products/search?q=laptop
+GET /techniques?type=dry-heat
 ```
 
-## Product Schema
-```json
-{
-  "id": "string",
-  "name": "string",
-  "price": "number",
-  "category": "string",
-  "in_stock": "boolean"
-}
-```
+Types: dry-heat, moist-heat, combination, preparation
+
+## Examples
+- `/techniques/saute` - Quick high-heat cooking
+- `/techniques/braise` - Low and slow with liquid
+- `/techniques/julienne` - Cutting into thin strips
 """
 }
 
@@ -136,22 +133,22 @@ def root_help():
     return HELP_CONTENT["root"]
 
 
-@app.get("/auth/help", response_class=PlainTextResponse)
-def auth_help():
-    """Authentication documentation."""
-    return HELP_CONTENT["auth"]
+@app.get("/recipes/help", response_class=PlainTextResponse)
+def recipes_help():
+    """Recipe browsing documentation."""
+    return HELP_CONTENT["recipes"]
 
 
-@app.get("/users/help", response_class=PlainTextResponse)
-def users_help():
-    """User management documentation."""
-    return HELP_CONTENT["users"]
+@app.get("/ingredients/help", response_class=PlainTextResponse)
+def ingredients_help():
+    """Ingredient information documentation."""
+    return HELP_CONTENT["ingredients"]
 
 
-@app.get("/products/help", response_class=PlainTextResponse)
-def products_help():
-    """Product catalog documentation."""
-    return HELP_CONTENT["products"]
+@app.get("/techniques/help", response_class=PlainTextResponse)
+def techniques_help():
+    """Cooking techniques documentation."""
+    return HELP_CONTENT["techniques"]
 
 
 @app.post("/search", response_class=PlainTextResponse)

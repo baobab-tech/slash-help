@@ -11,62 +11,82 @@ import { serve } from '@hono/node-server';
 const app = new Hono();
 
 const HELP_CONTENT: Record<string, string> = {
-  root: `# Example API
+  root: `# Recipe Book API
 
 A demo /help protocol implementation with Hono.
 
 ## Topics
-- \`/auth/help\` - Authentication and authorization
-- \`/users/help\` - User management
-- \`/products/help\` - Product catalog
+- \`/recipes/help\` - Browse and search recipes
+- \`/ingredients/help\` - Ingredient information
+- \`/techniques/help\` - Cooking techniques
 
 ## Quick Reference
 - \`GET /status\` - Health check
 - \`POST /search\` - Search documentation
 
 ## Getting Started
-Start with \`/auth/help\` to learn how to authenticate.
+Start with \`/recipes/help\` to browse available recipes.
 `,
 
-  auth: `# Authentication
+  recipes: `# Recipes
 
-## Overview
-This API uses Bearer token authentication.
-
-## Get a Token
+## Browse All Recipes
 \`\`\`bash
-curl -X POST /auth/token \\
-  -H "Content-Type: application/json" \\
-  -d '{"username": "user", "password": "pass"}'
+GET /recipes
 \`\`\`
 
-Response:
-\`\`\`json
-{"access_token": "eyJ...", "token_type": "bearer"}
+## Filter by Category
+\`\`\`bash
+GET /recipes?category=dinner
 \`\`\`
 
-## Use the Token
+Available categories: breakfast, lunch, dinner, dessert, snack
+
+## Get Recipe Details
+\`\`\`bash
+GET /recipes/{id}
 \`\`\`
-Authorization: Bearer eyJ...
+
+## Search Recipes
+\`\`\`bash
+GET /recipes/search?q=pasta
 \`\`\`
 `,
 
-  users: `# User Management
+  ingredients: `# Ingredients
 
-## Endpoints
-- \`GET /users\` - List users
-- \`POST /users\` - Create user
-- \`GET /users/{id}\` - Get user
-- \`PATCH /users/{id}\` - Update user
-- \`DELETE /users/{id}\` - Delete user
+## Look Up Ingredient
+\`\`\`bash
+GET /ingredients/{name}
+\`\`\`
+
+## Browse by Category
+\`\`\`bash
+GET /ingredients?category=vegetables
+\`\`\`
+
+## Find Substitutes
+\`\`\`bash
+GET /ingredients/{name}/substitutes
+\`\`\`
 `,
 
-  products: `# Product Catalog
+  techniques: `# Cooking Techniques
 
-## Endpoints
-- \`GET /products\` - List products
-- \`GET /products/{id}\` - Get product
-- \`GET /products/search?q=\` - Search products
+## List Techniques
+\`\`\`bash
+GET /techniques
+\`\`\`
+
+## Get Technique Details
+\`\`\`bash
+GET /techniques/{name}
+\`\`\`
+
+## Browse by Type
+\`\`\`bash
+GET /techniques?type=dry-heat
+\`\`\`
 `
 };
 
@@ -76,9 +96,9 @@ app.get('/help', (c) => {
 });
 
 // Topic help endpoints
-app.get('/auth/help', (c) => c.text(HELP_CONTENT.auth));
-app.get('/users/help', (c) => c.text(HELP_CONTENT.users));
-app.get('/products/help', (c) => c.text(HELP_CONTENT.products));
+app.get('/recipes/help', (c) => c.text(HELP_CONTENT.recipes));
+app.get('/ingredients/help', (c) => c.text(HELP_CONTENT.ingredients));
+app.get('/techniques/help', (c) => c.text(HELP_CONTENT.techniques));
 
 // Search
 app.post('/search', async (c) => {

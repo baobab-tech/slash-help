@@ -14,52 +14,77 @@ import (
 )
 
 var helpContent = map[string]string{
-	"root": `# Example API
+	"root": `# Recipe Book API
 
 A demo /help protocol implementation in Go.
 
 ## Topics
-- ` + "`/auth/help`" + ` - Authentication and authorization
-- ` + "`/users/help`" + ` - User management
-- ` + "`/products/help`" + ` - Product catalog
+- ` + "`/recipes/help`" + ` - Browse and search recipes
+- ` + "`/ingredients/help`" + ` - Ingredient information
+- ` + "`/techniques/help`" + ` - Cooking techniques
 
 ## Quick Reference
 - ` + "`GET /status`" + ` - Health check
 - ` + "`POST /search`" + ` - Search documentation
 
 ## Getting Started
-Start with ` + "`/auth/help`" + ` to learn how to authenticate.
+Start with ` + "`/recipes/help`" + ` to browse available recipes.
 `,
 
-	"auth": `# Authentication
+	"recipes": `# Recipes
 
-## Overview
-This API uses Bearer token authentication.
-
-## Get a Token
+## Browse All Recipes
 ` + "```bash" + `
-curl -X POST /auth/token \
-  -H "Content-Type: application/json" \
-  -d '{"username": "user", "password": "pass"}'
+GET /recipes
 ` + "```" + `
 
-## Use the Token
-Add header: ` + "`Authorization: Bearer <token>`" + `
+## Filter by Category
+` + "```bash" + `
+GET /recipes?category=dinner
+` + "```" + `
+
+Available categories: breakfast, lunch, dinner, dessert, snack
+
+## Get Recipe Details
+` + "```bash" + `
+GET /recipes/{id}
+` + "```" + `
 `,
 
-	"users": `# User Management
+	"ingredients": `# Ingredients
 
-## Endpoints
-- ` + "`GET /users`" + ` - List users
-- ` + "`POST /users`" + ` - Create user
-- ` + "`GET /users/{id}`" + ` - Get user
+## Look Up Ingredient
+` + "```bash" + `
+GET /ingredients/{name}
+` + "```" + `
+
+## Browse by Category
+` + "```bash" + `
+GET /ingredients?category=vegetables
+` + "```" + `
+
+## Find Substitutes
+` + "```bash" + `
+GET /ingredients/{name}/substitutes
+` + "```" + `
 `,
 
-	"products": `# Product Catalog
+	"techniques": `# Cooking Techniques
 
-## Endpoints
-- ` + "`GET /products`" + ` - List products
-- ` + "`GET /products/{id}`" + ` - Get product
+## List Techniques
+` + "```bash" + `
+GET /techniques
+` + "```" + `
+
+## Get Technique Details
+` + "```bash" + `
+GET /techniques/{name}
+` + "```" + `
+
+## Browse by Type
+` + "```bash" + `
+GET /techniques?type=dry-heat
+` + "```" + `
 `,
 }
 
@@ -115,9 +140,9 @@ func statusHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/help", helpHandler("root"))
-	http.HandleFunc("/auth/help", helpHandler("auth"))
-	http.HandleFunc("/users/help", helpHandler("users"))
-	http.HandleFunc("/products/help", helpHandler("products"))
+	http.HandleFunc("/recipes/help", helpHandler("recipes"))
+	http.HandleFunc("/ingredients/help", helpHandler("ingredients"))
+	http.HandleFunc("/techniques/help", helpHandler("techniques"))
 	http.HandleFunc("/search", searchHandler)
 	http.HandleFunc("/status", statusHandler)
 

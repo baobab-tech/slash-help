@@ -75,12 +75,12 @@ def search(query: str):
 ### Structure
 ```
 /help                    # Root overview
-├── /auth/help          # Authentication
-│   ├── /auth/tokens    # Deeper topic
-│   └── /auth/oauth     # Deeper topic
-├── /api/help           # API reference
-└── /guides/help        # Guides index
-    └── /guides/quickstart
+├── /recipes/help       # Recipe browsing
+│   ├── /recipes/dinner # Deeper topic
+│   └── /recipes/quick  # Deeper topic
+├── /ingredients/help   # Ingredient info
+└── /techniques/help    # Cooking methods
+    └── /techniques/saute
 ```
 
 ### Content Guidelines
@@ -133,7 +133,7 @@ http.HandleFunc("/help", func(w http.ResponseWriter, r *http.Request) {
 curl http://localhost:8000/help
 
 # Check topic
-curl http://localhost:8000/auth/help
+curl http://localhost:8000/recipes/help
 
 # Verify content-type
 curl -I http://localhost:8000/help | grep Content-Type
@@ -152,8 +152,8 @@ curl -I http://localhost:8000/help | grep Content-Type
 ### Service Wrapper
 ```
 /help → List of capabilities
-/payments/help → How to process payments
-/payments/refund → Refund instructions
+/recipes/help → Browse recipes
+/recipes/search → Search instructions
 ```
 
 ### Internal Tools

@@ -37,52 +37,48 @@ app = FastAPI()
 
 @app.get("/help", response_class=PlainTextResponse)
 def root_help():
-    return """# My API
+    return """# Recipe Book API
 
-Welcome! Here's what you can do:
+Welcome! Here's what you can explore:
 
 ## Topics
-- `/auth/help` - Authentication guide
-- `/users/help` - User management
-- `/search` - POST endpoint for queries
+- `/recipes/help` - Browse recipes by category
+- `/ingredients/help` - Ingredient information
+- `/techniques/help` - Cooking techniques
 
 ## Quick Actions
 - `GET /status` - Health check
-- `POST /users` - Create a user
+- `GET /recipes` - List all recipes
 """
 
-@app.get("/auth/help", response_class=PlainTextResponse)
-def auth_help():
-    return """# Authentication
+@app.get("/recipes/help", response_class=PlainTextResponse)
+def recipes_help():
+    return """# Recipes
 
-## Getting a Token
-POST to `/auth/token` with:
-```json
-{"username": "...", "password": "..."}
-```
+## Browse by Category
+`GET /recipes?category=dinner` - Filter by category
 
-## Using the Token
-Add header: `Authorization: Bearer <token>`
+Available categories: breakfast, lunch, dinner, dessert
 
-## Token Refresh
-POST to `/auth/refresh` with your current token.
+## Get Recipe Details
+`GET /recipes/{id}` - Returns full recipe with ingredients and steps
+
+## Search Recipes
+`GET /recipes/search?q=pasta` - Search by name or ingredient
 """
 
-@app.get("/users/help", response_class=PlainTextResponse)
-def users_help():
-    return """# User Management
+@app.get("/ingredients/help", response_class=PlainTextResponse)
+def ingredients_help():
+    return """# Ingredients
 
-## List Users
-`GET /users` - Returns paginated user list
+## Look Up Ingredient
+`GET /ingredients/{name}` - Returns nutrition and substitutes
 
-## Create User
-`POST /users` with:
-```json
-{"name": "...", "email": "..."}
-```
+## List by Category
+`GET /ingredients?category=vegetables` - Browse ingredients
 
-## Get User
-`GET /users/{id}` - Returns user details
+## Find Substitutes
+`GET /ingredients/{name}/substitutes` - Get alternatives
 """
 ```
 
@@ -90,13 +86,13 @@ def users_help():
 
 ```bash
 # Discover what's available
-curl https://api.example.com/help
+curl https://recipes.example.com/help
 
 # Drill into a topic
-curl https://api.example.com/auth/help
+curl https://recipes.example.com/recipes/help
 
 # Search (optional)
-curl -X POST https://api.example.com/search -d '{"q": "how to authenticate"}'
+curl https://recipes.example.com/recipes/search?q=vegetarian
 ```
 
 ## Two Modes
@@ -116,13 +112,13 @@ Serve navigable documentation. Agents fetch the table of contents first, then re
 ```
 
 ### Capabilities Mode
-Describe available services and how to use them. Agents discover and invoke endpoints on demand.
+Describe available services and how to use them. Agents discover what information is available on demand.
 
 ```
 /help
-├── /payments/help      → How to process payments
-├── /shipping/help      → Shipping rate calculation
-└── /inventory/help     → Stock management
+├── /recipes/help       → Browse and search recipes
+├── /ingredients/help   → Look up ingredient info
+└── /techniques/help    → Learn cooking methods
 ```
 
 ## Design Principles
@@ -154,7 +150,7 @@ Using a /help endpoint with your AI agent? Just give it the URL:
 - [`CLAUDE.md`](./CLAUDE.md) - Simple instructions for consuming /help endpoints
 
 ```
-"Check https://api.example.com/help and help me authenticate"
+"Check https://recipes.example.com/help and find me a quick dinner recipe"
 ```
 
 That's it. Your agent fetches `/help`, reads the markdown, follows the links.

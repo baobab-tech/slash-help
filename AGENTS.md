@@ -25,7 +25,7 @@ When building a /help service:
 1. **Root endpoint first** - Always implement `GET /help` that lists available topics
 2. **Content-Type: text/plain** - Return markdown as plain text
 3. **Self-contained topics** - Each `/topic/help` should be usable standalone
-4. **Link related content** - Use relative paths like `/auth/help`
+4. **Link related content** - Use relative paths like `/recipes/help`
 5. **Optional search** - Add `POST /search` for large knowledge bases
 
 ## Response Guidelines
@@ -97,9 +97,9 @@ curl -X POST /endpoint -d '{"key": "value"}'
 ### API Wrapper
 ```
 /help
-├── /auth/help
-├── /users/help
-└── /orders/help
+├── /recipes/help
+├── /ingredients/help
+└── /techniques/help
 ```
 
 ### Internal Knowledge Base
@@ -118,7 +118,7 @@ Always verify:
 curl http://localhost:8000/help
 
 # Topics are reachable
-curl http://localhost:8000/topic/help
+curl http://localhost:8000/recipes/help
 
 # Content-type is text/plain
 curl -I http://localhost:8000/help | grep Content-Type

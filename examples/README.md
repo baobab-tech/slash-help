@@ -42,19 +42,19 @@ Once running, test with:
 curl http://localhost:8000/help
 
 # Get specific topic
-curl http://localhost:8000/auth/help
+curl http://localhost:8000/recipes/help
 
 # Search
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"q": "token"}'
+  -d '{"q": "vegetarian"}'
 ```
 
 ## What Each Example Includes
 
 - `GET /help` - Root discovery endpoint
-- `GET /auth/help` - Authentication documentation
-- `GET /users/help` - User management docs
-- `GET /products/help` - Product catalog docs
+- `GET /recipes/help` - Recipe browsing and search
+- `GET /ingredients/help` - Ingredient information
+- `GET /techniques/help` - Cooking techniques
 - `POST /search` - Search across all content
 - `GET /status` - Health check

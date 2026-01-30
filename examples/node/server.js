@@ -10,78 +10,81 @@ const app = express();
 app.use(express.json());
 
 const HELP_CONTENT = {
-  root: `# Example API
+  root: `# Recipe Book API
 
 A demo /help protocol implementation.
 
 ## Topics
-- \`/auth/help\` - Authentication and authorization
-- \`/users/help\` - User management
-- \`/products/help\` - Product catalog
+- \`/recipes/help\` - Browse and search recipes
+- \`/ingredients/help\` - Ingredient information
+- \`/techniques/help\` - Cooking techniques
 
 ## Quick Reference
 - \`GET /status\` - Health check
 - \`POST /search\` - Search documentation
 
 ## Getting Started
-Start with \`/auth/help\` to learn how to authenticate.
+Start with \`/recipes/help\` to browse available recipes.
 `,
 
-  auth: `# Authentication
+  recipes: `# Recipes
 
-## Overview
-This API uses Bearer token authentication.
-
-## Get a Token
+## Browse All Recipes
 \`\`\`bash
-curl -X POST /auth/token \\
-  -H "Content-Type: application/json" \\
-  -d '{"username": "user", "password": "pass"}'
+GET /recipes
 \`\`\`
 
-Response:
-\`\`\`json
-{"access_token": "eyJ...", "token_type": "bearer"}
-\`\`\`
-
-## Use the Token
-Add to all requests:
-\`\`\`
-Authorization: Bearer eyJ...
-\`\`\`
-`,
-
-  users: `# User Management
-
-## List Users
+## Filter by Category
 \`\`\`bash
-GET /users?page=1&limit=20
+GET /recipes?category=dinner
 \`\`\`
 
-## Create User
-\`\`\`bash
-POST /users
-Content-Type: application/json
+Available categories: breakfast, lunch, dinner, dessert, snack
 
-{"name": "John", "email": "john@example.com"}
+## Get Recipe Details
+\`\`\`bash
+GET /recipes/{id}
 \`\`\`
 
-## Get User
+## Search Recipes
 \`\`\`bash
-GET /users/{id}
+GET /recipes/search?q=pasta
 \`\`\`
 `,
 
-  products: `# Product Catalog
+  ingredients: `# Ingredients
 
-## List Products
+## Look Up Ingredient
 \`\`\`bash
-GET /products?category=electronics&page=1
+GET /ingredients/{name}
 \`\`\`
 
-## Get Product
+## Browse by Category
 \`\`\`bash
-GET /products/{id}
+GET /ingredients?category=vegetables
+\`\`\`
+
+## Find Substitutes
+\`\`\`bash
+GET /ingredients/{name}/substitutes
+\`\`\`
+`,
+
+  techniques: `# Cooking Techniques
+
+## List Techniques
+\`\`\`bash
+GET /techniques
+\`\`\`
+
+## Get Technique Details
+\`\`\`bash
+GET /techniques/{name}
+\`\`\`
+
+## Browse by Type
+\`\`\`bash
+GET /techniques?type=dry-heat
 \`\`\`
 `
 };
@@ -92,16 +95,16 @@ app.get('/help', (req, res) => {
 });
 
 // Topic help endpoints
-app.get('/auth/help', (req, res) => {
-  res.type('text/plain').send(HELP_CONTENT.auth);
+app.get('/recipes/help', (req, res) => {
+  res.type('text/plain').send(HELP_CONTENT.recipes);
 });
 
-app.get('/users/help', (req, res) => {
-  res.type('text/plain').send(HELP_CONTENT.users);
+app.get('/ingredients/help', (req, res) => {
+  res.type('text/plain').send(HELP_CONTENT.ingredients);
 });
 
-app.get('/products/help', (req, res) => {
-  res.type('text/plain').send(HELP_CONTENT.products);
+app.get('/techniques/help', (req, res) => {
+  res.type('text/plain').send(HELP_CONTENT.techniques);
 });
 
 // Search endpoint
