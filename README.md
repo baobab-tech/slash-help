@@ -84,41 +84,39 @@ def ingredients_help():
 
 ### Using It
 
-```bash
-# Discover what's available
-curl https://recipes.example.com/help
+```
+GET https://recipes.example.com/help
+→ See available topics
 
-# Drill into a topic
-curl https://recipes.example.com/recipes/help
+GET https://recipes.example.com/recipes/help
+→ Learn how to browse and search
 
-# Search (optional)
-curl https://recipes.example.com/recipes/search?q=vegetarian
+GET https://recipes.example.com/recipes/search?q=vegetarian
+→ Find matching recipes
 ```
 
 ## Two Modes
 
 ### Knowledge Mode
-Serve navigable documentation. Agents fetch the table of contents first, then retrieve only relevant sections.
+Serve navigable documentation, policies, or specs. Agents fetch the table of contents first, then retrieve only relevant sections.
 
 ```
-/help
-├── /concepts/help
-│   ├── /concepts/architecture
-│   └── /concepts/data-model
-├── /guides/help
-│   ├── /guides/quickstart
-│   └── /guides/deployment
-└── /reference/help
+https://docs.product.com/help      → "How does webhook retry work?"
+https://handbook.company.com/help  → "What's our PTO policy?"
+https://standards.eng.io/help      → "How should we handle errors in Go?"
+https://runbooks.ops.io/help       → "How do I restart the workers?"
+https://design.system.io/help      → "What's the button component API?"
 ```
 
 ### Capabilities Mode
-Describe available services and how to use them. Agents discover what information is available on demand.
+Describe available services and how to invoke them. Agents discover and use functionality on demand.
 
 ```
-/help
-├── /recipes/help       → Browse and search recipes
-├── /ingredients/help   → Look up ingredient info
-└── /techniques/help    → Learn cooking methods
+https://qr.tools.io/help           → "Make a QR code with a logo"
+https://cron.utils.dev/help        → "What does '0 */4 * * *' mean?"
+https://resize.img.io/help         → "Shrink this to 800px wide"
+https://json.validate.io/help      → "Check if this config is valid"
+https://screenshot.web.io/help     → "Capture this URL at mobile size"
 ```
 
 ## Design Principles
